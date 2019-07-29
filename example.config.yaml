@@ -1,0 +1,19 @@
+bot:
+  commands_enabled: false
+  plugins:
+  - TurtleBop.plugins.core
+  - TurtleBop.plugins.settings
+  - TurtleBop.plugins.stats
+  - TurtleBop.plugins.dev
+  - TurtleBop.plugins.music
+
+logging_channel: 000000000000000000
+
+postgres:
+  database: music
+  host: localhost
+  password: INSERT-PASSWORD-HERE
+  port: '5432'
+  username: postgres
+
+token: INSERT-BOT-TOKEN-HERE
