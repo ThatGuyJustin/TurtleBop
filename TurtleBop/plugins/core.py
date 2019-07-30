@@ -24,7 +24,7 @@ from disco.util.sanitize import S
 
 from TurtleBop.db import init_db, database
 from TurtleBop.models.guild import Guild
-from TurtleBop import bot_config  # , update_config
+from TurtleBop import bot_config, CommandResponse  # , update_config
 
 PY_CODE_BLOCK = '```py\n{}\n```'
 
@@ -69,6 +69,11 @@ class CorePlugin(Plugin):
 
         new_setup = False
         guild = None
+
+        if bot_config.dev_mode and not event.bot_admin or bot_config.dev_mode and event.message.author.id not in bot_config.testers:
+            return
+        else:
+            event.user_level = 10
 
         if event.message.guild:
             try:
@@ -125,6 +130,8 @@ class CorePlugin(Plugin):
                         self.dis_cmd_help(command, command_event, event, guild)
                         return
                 command.plugin.execute(command_event)
+            except CommandResponse as e:
+                event.reply(e.response)
             except:
                 self.log.exception('Command error:')
                 return event.reply('It seems that an error has occured! :(')
@@ -148,12 +155,12 @@ class CorePlugin(Plugin):
         """
         if command is None:
             embed = MessageEmbed()
-            embed.title = 'GamesKeeper Help'
+            embed.title = 'TurtleBop Help'
             embed.description = '**To get help with a certain command please use `{prefix}help Command`**\n** **\nFor help with settings please type `{prefix}help settings`'.format(prefix=event.db_guild.prefix)
             return event.msg.reply('', embed=embed)
         elif command == 'settings' and (event.user_level == 100 or event.bot_admin):
             embed = MessageEmbed()
-            embed.title = 'GamesKeeper Settings Help'
+            embed.title = 'TurtleBop Settings Help'
             description = [
                 'To change most settings, the command group is `update`',
                 '\♦ To change **Prefix**, use `{}settings prefix`'.format(event.db_guild.prefix),

@@ -36,3 +36,18 @@ class CustomEmitter(EventEmitter):
 
 
 Emitter = CustomEmitter()
+
+class CommandResponse(Exception):
+    EMOJI = None
+
+    def __init__(self, response):
+        if self.EMOJI:
+            response = '{} {}'.format(self.EMOJI, response)
+        self.response = response
+
+class CommandFail(CommandResponse):
+    EMOJI = ':no_entry_sign: `Error`:'
+
+
+class CommandSuccess(CommandResponse):
+    EMOJI = ':ballot_box_with_check:'
